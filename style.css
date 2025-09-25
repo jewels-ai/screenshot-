@@ -44,7 +44,7 @@ video, canvas {
   margin-right: 10px;
 }
 
-/* Main Jewelry Category Buttons (EARRINGS, CHAINS, etc.) */
+/* Main Jewelry Category Buttons */
 #jewelry-mode {
   position: fixed;
   bottom: 10px;
@@ -75,7 +75,7 @@ video, canvas {
   background-color: #3b0764;
 }
 
-/* Subcategory Buttons (Gold/Diamond) */
+/* Subcategory Buttons */
 #subcategory-buttons {
   position: fixed;
   bottom: 130px;
@@ -141,7 +141,7 @@ video, canvas {
   transform: scale(1.05);
 }
 
-/* UI Buttons (Location + Capture) */
+/* UI Buttons */
 .ui-buttons {
   position: fixed;
   top: 20px;
@@ -175,13 +175,16 @@ video, canvas {
 }
 
 /* Screenshot Preview */
-#screenshot-preview {
+#screenshot-link {
   position: fixed;
   bottom: 80px;
   right: 20px;
+  z-index: 10;
+  display: none;
+}
+
+#screenshot-preview {
   width: 120px;
   border-radius: 12px;
   border: 2px solid #fff;
-  display: none;
-  z-index: 10;
 }

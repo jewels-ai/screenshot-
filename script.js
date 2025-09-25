@@ -196,43 +196,48 @@ function drawJewelry(faceLandmarks, ctx) {
 // ================= Screenshot & Share =================
 const captureBtn = document.getElementById("capture-btn");
 const screenshotPreview = document.getElementById("screenshot-preview");
+const screenshotLink = document.getElementById("screenshot-link");
 
 captureBtn.addEventListener("click", () => {
-  const screenshotCanvas = document.createElement("canvas");
-  const ctx = screenshotCanvas.getContext("2d");
-  screenshotCanvas.width = videoElement.videoWidth;
-  screenshotCanvas.height = videoElement.videoHeight;
+  // Wait until overlay is fully drawn
+  requestAnimationFrame(() => {
+    const screenshotCanvas = document.createElement("canvas");
+    const ctx = screenshotCanvas.getContext("2d");
+    screenshotCanvas.width = videoElement.videoWidth;
+    screenshotCanvas.height = videoElement.videoHeight;
 
-  // Draw webcam frame
-  ctx.drawImage(videoElement, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
+    // Draw webcam frame
+    ctx.drawImage(videoElement, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
 
-  // Draw jewelry overlay
-  ctx.drawImage(canvasElement, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
+    // Draw jewelry overlay
+    ctx.drawImage(canvasElement, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
 
-  // Convert to image
-  const dataUrl = screenshotCanvas.toDataURL("image/png");
+    // Convert to image
+    const dataUrl = screenshotCanvas.toDataURL("image/png");
 
-  // Show preview
-  screenshotPreview.src = dataUrl;
-  screenshotPreview.style.display = "block";
+    // Show preview (clickable)
+    screenshotPreview.src = dataUrl;
+    screenshotLink.href = dataUrl;
+    screenshotLink.style.display = "block";
 
-  // Download automatically
-  const link = document.createElement("a");
-  link.href = dataUrl;
-  link.download = "my_virtual_jewelry.png";
-  link.click();
+    // Download automatically
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = "my_virtual_jewelry.png";
+    link.click();
 
-  // Web Share API
-  if (navigator.canShare && navigator.canShare({ files: [] })) {
-    screenshotCanvas.toBlob((blob) => {
-      const file = new File([blob], "jewelry.png", { type: "image/png" });
-      navigator.share({
-        files: [file],
-        title: "Virtual Jewelry Try-On",
-        text: "Check out how I look with this jewelry!",
-      }).catch(err => console.log("Share cancelled:", err));
-    });
-  } else {
-    console.log("Web Share not supported. Image downloaded instead.");
-  }
+    // Web Share API
+    if (navigator.canShare && navigator.canShare({ files: [] })) {
+      screenshotCanvas.toBlob((blob) => {
+        const file = new File([blob], "jewelry.png", { type: "image/png" });
+        navigator.share({
+          files: [file],
+          title: "Virtual Jewelry Try-On",
+          text: "Check out how I look with this jewelry!",
+        }).catch(err => console.log("Share cancelled:", err));
+      });
+    } else {
+      console.log("Web Share not supported. Image downloaded instead.");
+    }
+  });
 });
